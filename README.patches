@@ -1,3 +1,7 @@
+The patches from from two hibernate bug reports:
+https://hibernate.onjira.com/browse/HHH-1803
+https://hibernate.onjira.com/browse/HHH-1283
+
 Go into this directory:
 hibernate-orm/hibernate-core
 
