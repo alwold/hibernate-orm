@@ -1,0 +1,11 @@
+Go into this directory:
+hibernate-orm/hibernate-core
+
+First apply this patch:
+patch -p3 < fetch-scroll-collection-3.5.4.patch.txt
+
+Then go into this directory:
+hibernate-orm/hibernate-core/src/main/java
+
+Then apply this patch:
+patch -p5 < ~/hibernate-orm/criteria-scroll-fetch-collection.patch.txt

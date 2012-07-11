@@ -210,4 +210,11 @@ public class CriteriaLoader extends OuterJoinLoader {
 		return resolveResultTransformer( resultTransformer ).transformList( results );
 	}
 
+	protected boolean needsFetchingScroll() {
+		return collectionPersisters != null;
+	}
+	
+	protected int getRootKeyIndex() {
+		return aliases.length-1;
+	}
 }

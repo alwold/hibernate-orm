@@ -165,7 +165,7 @@ public class CollectionLoadContext {
 	 *
 	 * @param persister The persister for which to complete loading.
 	 */
-	public void endLoadingCollections(CollectionPersister persister) {
+	public void endLoadingCollections(CollectionPersister persister, Object loadedEntity) {
 		SessionImplementor session = getLoadContext().getPersistenceContext().getSession();
 		if ( !loadContexts.hasLoadingCollectionEntries()
 				&& localLoadingCollectionKeys.isEmpty() ) {
@@ -187,16 +187,19 @@ public class CollectionLoadContext {
 				log.warn( "In CollectionLoadContext#endLoadingCollections, localLoadingCollectionKeys contained [" + collectionKey + "], but no LoadingCollectionEntry was found in loadContexts" );
 			}
 			else if ( lce.getResultSet() == resultSet && lce.getPersister() == persister ) {
-				if ( matches == null ) {
-					matches = new ArrayList();
-				}
-				matches.add( lce );
 				if ( lce.getCollection().getOwner() == null ) {
 					session.getPersistenceContext().addUnownedCollection(
 							new CollectionKey( persister, lce.getKey(), session.getEntityMode() ),
 							lce.getCollection()
 					);
+				} else if (loadedEntity != null && lce.getCollection().getOwner() != loadedEntity) {
+					// The collection does not belong to the loadedEntity and is not completely initialized
+					continue;
 				}
+				if ( matches == null ) {
+					matches = new ArrayList();
+				}
+				matches.add( lce );
 				if ( log.isTraceEnabled() ) {
 					log.trace( "removing collection load entry [" + lce + "]" );
 				}
